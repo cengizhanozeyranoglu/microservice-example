@@ -1,0 +1,18 @@
+spring:
+  application:
+    name: companymicroservices
+  jpa:
+    show-sql: true
+    hibernate:
+      ddl-auto: create
+    properties:
+      hibernate:
+        dialect: org.hibernate.dialect.PostgreSQLDialect
+        default_schema: companyms
+  datasource:
+    username: postgres
+    password: 1
+    driver-class-name: org.postgresql.Driver
+    url: jdbc:postgresql://localhost:5432/postgres
+server:
+  port: 8081
