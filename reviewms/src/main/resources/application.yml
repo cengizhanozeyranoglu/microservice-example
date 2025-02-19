@@ -8,4 +8,5 @@ spring:
       username: root
       password: example
       authentication-database: admin
-
+server:
+  port: 8083
