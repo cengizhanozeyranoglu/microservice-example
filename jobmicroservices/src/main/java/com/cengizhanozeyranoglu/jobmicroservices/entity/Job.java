@@ -28,5 +28,8 @@ public class Job {
 
     private String location;
 
+    @Column(name = "company_Id")
+    private Long companyId;
+
 
 }

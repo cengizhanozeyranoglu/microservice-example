@@ -18,4 +18,6 @@ public class DtoJob {
     private String maxSalary;
 
     private String location;
+
+    private Long companyId;
 }

@@ -52,6 +52,7 @@ public class JobServiceImpl implements IJobService {
             job.setTittle(dtoJob.getTittle());
             job.setMinSalary(dtoJob.getMinSalary());
             job.setMaxSalary(dtoJob.getMaxSalary());
+            job.setCompanyId(dtoJob.getCompanyId());
             Job savedJob = jobRepository.save(job);
             return JobMapper.toDto(savedJob);
         } else log.info("Job with id {} not found", id);

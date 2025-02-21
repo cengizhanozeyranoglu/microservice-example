@@ -12,6 +12,7 @@ public class JobMapper {
                 .minSalary(job.getMinSalary())
                 .maxSalary(job.getMaxSalary())
                 .location(job.getLocation())
+                .companyId(job.getCompanyId())
                 .build();
         return dtoJob;
 
@@ -24,6 +25,7 @@ public class JobMapper {
                 .minSalary(dtoJob.getMinSalary())
                 .maxSalary(dtoJob.getMaxSalary())
                 .location(dtoJob.getLocation())
+                .companyId(dtoJob.getCompanyId())
                 .build();
         return job;
     }
