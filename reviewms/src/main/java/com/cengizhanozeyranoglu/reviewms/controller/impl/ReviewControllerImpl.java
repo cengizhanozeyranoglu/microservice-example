@@ -2,12 +2,14 @@ package com.cengizhanozeyranoglu.reviewms.controller.impl;
 
 import com.cengizhanozeyranoglu.reviewms.controller.IReviewController;
 import com.cengizhanozeyranoglu.reviewms.dto.DtoReview;
+import com.cengizhanozeyranoglu.reviewms.dto.ResponseDtoReveiwAndCompany;
 import com.cengizhanozeyranoglu.reviewms.service.IReviewService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+
 
 @RestController
 @RequestMapping(path = "/reviews")
@@ -31,9 +33,9 @@ public class ReviewControllerImpl implements IReviewController {
 
     @Override
     @GetMapping(path = "getReviews/{companyId}")
-    public ResponseEntity<List<DtoReview>> getReviewByCompanyId(@PathVariable Long companyId) {
-        List<DtoReview> dtoReviewList = reviewService.getReviewsByCompanyId(companyId);
-        return dtoReviewList.isEmpty() ? ResponseEntity.notFound().build() : ResponseEntity.ok(dtoReviewList);
+    public ResponseEntity<ResponseDtoReveiwAndCompany> getReviewByCompanyId(@PathVariable Long companyId) {
+        ResponseDtoReveiwAndCompany response = reviewService.getReviewsByCompanyId(companyId);
+        return response != null ? ResponseEntity.ok(response) : ResponseEntity.notFound().build();
     }
 
     @Override
@@ -48,5 +50,11 @@ public class ReviewControllerImpl implements IReviewController {
     @DeleteMapping(path = "/deleteReview/{id}")
     public ResponseEntity<Void> deleteReviewById(@PathVariable String id) {
         return reviewService.deleteReview(id) ? ResponseEntity.noContent().build() : ResponseEntity.notFound().build();
+    }
+
+    @Override
+    @GetMapping(path = "/getReviews")
+    public ResponseEntity<List<DtoReview>> getReviewList() {
+        return ResponseEntity.ok(reviewService.getReviewList());
     }
 }

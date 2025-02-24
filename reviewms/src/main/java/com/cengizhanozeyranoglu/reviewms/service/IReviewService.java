@@ -1,6 +1,7 @@
 package com.cengizhanozeyranoglu.reviewms.service;
 
 import com.cengizhanozeyranoglu.reviewms.dto.DtoReview;
+import com.cengizhanozeyranoglu.reviewms.dto.ResponseDtoReveiwAndCompany;
 
 import java.util.List;
 
@@ -10,7 +11,9 @@ public interface IReviewService {
 
     DtoReview updateReview(DtoReview dtoReview, String id);
 
-    List<DtoReview> getReviewsByCompanyId(Long companyId);
+    ResponseDtoReveiwAndCompany getReviewsByCompanyId(Long companyId);
+
+    List<DtoReview> getReviewList();
 
     DtoReview getReviewById(String id);
 

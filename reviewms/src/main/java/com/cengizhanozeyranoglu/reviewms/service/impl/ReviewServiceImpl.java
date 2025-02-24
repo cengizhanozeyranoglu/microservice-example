@@ -1,7 +1,11 @@
 package com.cengizhanozeyranoglu.reviewms.service.impl;
 
+import com.cengizhanozeyranoglu.reviewms.client.ICompanyClient;
+import com.cengizhanozeyranoglu.reviewms.dto.DtoCompany;
 import com.cengizhanozeyranoglu.reviewms.dto.DtoReview;
+import com.cengizhanozeyranoglu.reviewms.dto.ResponseDtoReveiwAndCompany;
 import com.cengizhanozeyranoglu.reviewms.entity.Review;
+import com.cengizhanozeyranoglu.reviewms.exception.CompanyNotFoundExcepiton;
 import com.cengizhanozeyranoglu.reviewms.mapper.ReviewMapper;
 import com.cengizhanozeyranoglu.reviewms.repository.ReviewRepository;
 import com.cengizhanozeyranoglu.reviewms.service.IReviewService;
@@ -9,9 +13,12 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
+
 
 @Slf4j
 @Service
@@ -19,6 +26,8 @@ import java.util.stream.Collectors;
 public class ReviewServiceImpl implements IReviewService {
 
     private final ReviewRepository reviewRepo;
+
+    private final ICompanyClient companyClient;
 
 
     @Override
@@ -46,11 +55,34 @@ public class ReviewServiceImpl implements IReviewService {
     }
 
     @Override
-    public List<DtoReview> getReviewsByCompanyId(Long companyId) {
-        return reviewRepo.findByCompanyId(companyId)
+    public ResponseDtoReveiwAndCompany getReviewsByCompanyId(Long companyId) {
+        ResponseDtoReveiwAndCompany response = new ResponseDtoReveiwAndCompany();
+        List<DtoReview> dtoReviews = reviewRepo.findByCompanyId(companyId)
+                .orElse(Collections.emptyList())
                 .stream()
                 .map(ReviewMapper::toDto)
                 .collect(Collectors.toList());
+        response.setDtoReview(dtoReviews);
+        if (dtoReviews.isEmpty()) {
+            log.info("No reviews found for companyId {}", companyId);
+        }
+        try {
+            DtoCompany dtoCompany = companyClient.getCompanyById(companyId);
+            response.setDtoCompany(dtoCompany);
+        } catch (CompanyNotFoundExcepiton e) {
+            log.info("Company id {} not found", companyId);
+            throw new CompanyNotFoundExcepiton("Company not found for ID" + companyId);
+        }
+        return response;
+    }
+
+    @Override
+    public List<DtoReview> getReviewList() {
+       List<Review> reviewList = reviewRepo.findAll();
+       List<DtoReview> dtoReviews = reviewList.stream()
+               .map(ReviewMapper::toDto)
+               .collect(Collectors.toList());
+       return dtoReviews;
     }
 
     @Override
@@ -74,4 +106,6 @@ public class ReviewServiceImpl implements IReviewService {
             return false;
         }
     }
+
+
 }
