@@ -2,6 +2,7 @@ package com.cengizhanozeyranoglu.jobmicroservices.controller.impl;
 
 import com.cengizhanozeyranoglu.jobmicroservices.controller.IJobController;
 import com.cengizhanozeyranoglu.jobmicroservices.dto.DtoJob;
+import com.cengizhanozeyranoglu.jobmicroservices.dto.DtoResponseCompanyAndJob;
 import com.cengizhanozeyranoglu.jobmicroservices.service.IJobService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
@@ -59,5 +60,15 @@ public class JobControllerImpl implements IJobController {
             return ResponseEntity.notFound().build();
         }
         return ResponseEntity.noContent().build();
+    }
+
+    @Override
+    @GetMapping(path = "/getJobsWithCompany/{companyId}")
+    public ResponseEntity<DtoResponseCompanyAndJob> getCompanyAndJobById(@PathVariable Long companyId) {
+        DtoResponseCompanyAndJob response = jobService.getJobAndCompanyById(companyId);
+        if (response == null) {
+            return ResponseEntity.notFound().build();
+        }
+        return ResponseEntity.ok(response);
     }
 }

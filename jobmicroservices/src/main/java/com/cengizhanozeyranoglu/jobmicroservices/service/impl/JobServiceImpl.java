@@ -1,10 +1,14 @@
 package com.cengizhanozeyranoglu.jobmicroservices.service.impl;
 
+import com.cengizhanozeyranoglu.jobmicroservices.client.ICompanyClient;
+import com.cengizhanozeyranoglu.jobmicroservices.dto.DtoCompany;
 import com.cengizhanozeyranoglu.jobmicroservices.dto.DtoJob;
+import com.cengizhanozeyranoglu.jobmicroservices.dto.DtoResponseCompanyAndJob;
 import com.cengizhanozeyranoglu.jobmicroservices.entity.Job;
 import com.cengizhanozeyranoglu.jobmicroservices.mapper.JobMapper;
 import com.cengizhanozeyranoglu.jobmicroservices.repository.JobRepository;
 import com.cengizhanozeyranoglu.jobmicroservices.service.IJobService;
+import jakarta.persistence.EntityNotFoundException;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
@@ -20,6 +24,8 @@ import java.util.Optional;
 public class JobServiceImpl implements IJobService {
 
     private final JobRepository jobRepository;
+
+    private final ICompanyClient companyClient;
 
     @Override
     public List<DtoJob> getJobsList() {
@@ -78,5 +84,14 @@ public class JobServiceImpl implements IJobService {
             return true;
         } else log.info("Job with id {} not found", id);
         return false;
+    }
+
+    @Override
+    public DtoResponseCompanyAndJob getJobAndCompanyById(Long jobId) {
+        Job job = jobRepository.findById(jobId)
+                .orElseThrow(() -> new EntityNotFoundException("Job with id" + jobId + "not found"));
+        DtoJob dtoJob = JobMapper.toDto(job);
+        DtoCompany dtoCompany = companyClient.getCompanyById(dtoJob.getCompanyId());
+        return new DtoResponseCompanyAndJob(dtoJob, dtoCompany);
     }
 }
