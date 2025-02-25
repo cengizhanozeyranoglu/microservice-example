@@ -19,6 +19,7 @@
         <sourceTestOutputDir name="target/generated-test-sources/test-annotations" />
         <outputRelativeToContentRoot value="true" />
         <module name="service-reg" />
+        <module name="configserver" />
       </profile>
       <profile name="Annotation profile for jobmicroservices" enabled="true">
         <sourceOutputDir name="target/generated-sources/annotations" />
@@ -39,6 +40,7 @@
     <option name="ADDITIONAL_OPTIONS_OVERRIDE">
       <module name="companymicroservices" options="-parameters" />
       <module name="companymicroservices (2)" options="-parameters" />
+      <module name="configserver" options="-parameters" />
       <module name="jobmicroservices" options="-parameters" />
       <module name="reviewms" options="-parameters" />
       <module name="service-reg" options="-parameters" />
