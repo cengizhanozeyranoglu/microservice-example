@@ -1,6 +1,6 @@
 spring:
   application:
-    name: service-registry
+    name: service-reg
 eureka:
   client:
     register-with-eureka: false
