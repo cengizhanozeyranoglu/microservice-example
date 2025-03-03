@@ -22,15 +22,15 @@
         </processorPath>
         <module name="companymicroservices" />
       </profile>
-      <profile name="Annotation profile for reviewms" enabled="true">
+      <profile name="Annotation profile for jobmicroservices" enabled="true">
         <sourceOutputDir name="target/generated-sources/annotations" />
         <sourceTestOutputDir name="target/generated-test-sources/test-annotations" />
         <outputRelativeToContentRoot value="true" />
         <processorPath useClasspath="false">
           <entry name="$MAVEN_REPOSITORY$/org/projectlombok/lombok/1.18.32/lombok-1.18.32.jar" />
         </processorPath>
-        <module name="reviewms" />
         <module name="jobmicroservices" />
+        <module name="reviewms" />
       </profile>
     </annotationProcessing>
   </component>
