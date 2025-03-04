@@ -7,6 +7,7 @@ import com.cengizhanozeyranoglu.reviewms.dto.ResponseDtoReveiwAndCompany;
 import com.cengizhanozeyranoglu.reviewms.entity.Review;
 import com.cengizhanozeyranoglu.reviewms.exception.CompanyNotFoundExcepiton;
 import com.cengizhanozeyranoglu.reviewms.mapper.ReviewMapper;
+import com.cengizhanozeyranoglu.reviewms.messaging.MessagePublisher;
 import com.cengizhanozeyranoglu.reviewms.repository.ReviewRepository;
 import com.cengizhanozeyranoglu.reviewms.service.IReviewService;
 import lombok.RequiredArgsConstructor;
@@ -29,11 +30,14 @@ public class ReviewServiceImpl implements IReviewService {
 
     private final ICompanyClient companyClient;
 
+    private final MessagePublisher messagePublisher;
+
 
     @Override
     public DtoReview createReview(DtoReview dtoReview) {
         Review review = ReviewMapper.toReview(dtoReview);
         Review savedReview = reviewRepo.save(review);
+        messagePublisher.publish(dtoReview.getCompanyId());
         DtoReview dtoRev = ReviewMapper.toDto(savedReview);
         return dtoRev;
     }
