@@ -7,7 +7,7 @@ import lombok.*;
 @AllArgsConstructor
 @NoArgsConstructor
 @Builder
-public class DtoReview {
+public class DtoReview  {
 
     private String title;
 

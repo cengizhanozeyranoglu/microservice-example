@@ -2,6 +2,7 @@ package com.cengizhanozeyranoglu.reviewms.messaging;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.amqp.rabbit.connection.ConnectionFactory;
 import org.springframework.amqp.rabbit.core.RabbitTemplate;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
@@ -19,10 +20,10 @@ public class MessagePublisher {
 
     private final RabbitTemplate rabbitTemplate;
 
-    public void publish(Long companyId) {
-        String message = "New review posted for companyId" + companyId;
-        log.info(message);
+    public void publish(Long  companyId) {
+        String message ="Review create for companyId:" + companyId;
+        log.info("Publishing message:"+ message);
         rabbitTemplate.convertAndSend(exchange, routingKey, message);
+        log.info("Message sent to RabbitMQ");
     }
-
 }
