@@ -12,6 +12,9 @@ import com.cengizhanozeyranoglu.reviewms.repository.ReviewRepository;
 import com.cengizhanozeyranoglu.reviewms.service.IReviewService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.cache.annotation.CacheEvict;
+import org.springframework.cache.annotation.CachePut;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
@@ -32,7 +35,7 @@ public class ReviewServiceImpl implements IReviewService {
 
     private final MessagePublisher messagePublisher;
 
-
+    @CacheEvict(value = "reviews", allEntries = true)
     @Override
     public DtoReview createReview(DtoReview dtoReview) {
         Review review = ReviewMapper.toReview(dtoReview);
@@ -42,6 +45,7 @@ public class ReviewServiceImpl implements IReviewService {
         return dtoRev;
     }
 
+    @CacheEvict(value = "reviews", key = "#id", allEntries = true)
     @Override
     public DtoReview updateReview(DtoReview dtoReview, String id) {
         return reviewRepo.findById(id)
@@ -80,13 +84,14 @@ public class ReviewServiceImpl implements IReviewService {
         return response;
     }
 
+    @Cacheable(value = "reviews", key = "#root.methodName", unless = "#result==null")
     @Override
     public List<DtoReview> getReviewList() {
-       List<Review> reviewList = reviewRepo.findAll();
-       List<DtoReview> dtoReviews = reviewList.stream()
-               .map(ReviewMapper::toDto)
-               .collect(Collectors.toList());
-       return dtoReviews;
+        List<Review> reviewList = reviewRepo.findAll();
+        List<DtoReview> dtoReviews = reviewList.stream()
+                .map(ReviewMapper::toDto)
+                .collect(Collectors.toList());
+        return dtoReviews;
     }
 
     @Override
